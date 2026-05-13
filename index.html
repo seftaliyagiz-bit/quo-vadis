@@ -217,7 +217,7 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('images/quovadis-1.png');
+    background-image: url('images/quovadis-4.png');
     background-size: cover;
     background-position: center;
     filter: saturate(0.85);
@@ -756,7 +756,7 @@
     height: 220px;
     box-shadow: 0 4px 20px var(--shadow);
   }
-  .map-wrap iframe {
+  .map-wrap iframe { height: 350px; border-radius: 12px; /* updated */
     width: 100%;
     height: 100%;
     border: none;
@@ -930,24 +930,29 @@
     .hero-btns { flex-direction: column; align-items: center; }
     .stats-row { flex-direction: column; }
   }
+
+  /* ── Language Toggle ── */
+  .lang-toggle { display:flex;align-items:center;gap:0;border:1.5px solid var(--terra);border-radius:6px;overflow:hidden; }
+  .lang-btn { background:transparent;border:none;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.8px;color:var(--text);transition:background 0.2s,color 0.2s;font-family:var(--font-sans); }
+  .lang-btn.active { background:var(--terra);color:#fff; }
+  .lang-btn:hover:not(.active) { background:rgba(196,70,42,0.08); }
+  .nav-logo-img { height:38px;width:auto;object-fit:contain;display:block; }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#hero" class="nav-logo">
-    <span class="nav-logo-name">Quo Vadis</span>
-    <span class="nav-logo-sub">Pizzeria · Leuven</span>
-  </a>
+  <a href="#hero" class="nav-logo"><img src="images/quovadis-1.png" alt="Quo Vadis" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="#menu">Menu</a></li>
-    <li><a href="#over-ons">Over ons</a></li>
-    <li><a href="#reservatie">Reservatie</a></li>
+    <li><a href="#over-ons" data-lang="nav_about">Over ons</a></li>
+    <li><a href="#reservatie" data-lang="nav_res">Reservatie</a></li>
     <li><a href="#reservatie">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <a href="#reservatie" class="btn-terra">Bestel nu</a>
+    <a href="#reservatie" class="btn-terra" data-lang="nav_cta">Bestel nu</a>
+    <div class="lang-toggle" id="langToggle" style="margin-right:8px"><button class="lang-btn active" data-lang="nl">NL</button><button class="lang-btn" data-lang="en">EN</button></div>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -957,8 +962,8 @@
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="#menu"       class="mobile-link">Menu</a>
-  <a href="#over-ons"   class="mobile-link">Over ons</a>
-  <a href="#reservatie" class="mobile-link">Reservatie</a>
+  <a href="#over-ons" class="mobile-link" data-lang="nav_about">Over ons</a>
+  <a href="#reservatie" class="mobile-link" data-lang="nav_res">Reservatie</a>
   <a href="#reservatie" class="mobile-link">Contact</a>
   <a href="#reservatie" class="btn-terra mobile-link">Bestel nu</a>
 </div>
@@ -979,7 +984,7 @@
       <a href="#reservatie" class="btn-hero-outline">Reserveer</a>
     </div>
     <div class="hero-open">
-      <span class="pulse-dot"></span> Vandaag open
+      <span class="pulse-dot"></span> <span data-lang="hero_open">Vandaag open</span>
     </div>
   </div>
 
@@ -1203,20 +1208,17 @@
         <li>
           <div class="contact-icon-wrap"><i class="fa-solid fa-clock"></i></div>
           <div>
-            <div class="contact-key">Open</div>
+            <div class="contact-key" data-lang="con_key_open">Open</div>
             <div class="contact-val">
-              <span style="display:flex;align-items:center;gap:8px">
-                <span class="pulse-dot"></span>
-                Ma – Zo &nbsp;·&nbsp; Lunch &amp; Diner
-              </span>
+              <span data-lang="con_hours">Ma: 12:00–14:30 &amp; 18:00–22:00<br>Di–Za: 12:00–14:30 &amp; 18:00–22:30<br>Zo: 12:00–14:30 &amp; 18:00–22:00</span>
             </div>
           </div>
         </li>
       </ul>
       <div class="map-wrap">
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=4.6990%2C50.8755%2C4.7050%2C50.8795&layer=mapnik&marker=50.8775%2C4.7020"
-          allowfullscreen loading="lazy"
+          src="https://www.google.com/maps?q=Muntstraat+11,+3000+Leuven&output=embed"
+          width="100%" height="350" style="border:0;border-radius:12px;" allowfullscreen loading="lazy"
           title="Quo Vadis — Muntstraat 11, Leuven"
         ></iframe>
       </div>
@@ -1341,6 +1343,37 @@ document.getElementById('res-form').addEventListener('submit', function(e) {
   this.style.display = 'none';
   document.getElementById('res-success').style.display = 'block';
 });
+</script>
+
+<script>
+const QVLANG = {
+  nl: {
+    nav_about:'Over ons', nav_res:'Reservatie', nav_cta:'Bestel nu',
+    hero_open:'Vandaag open', con_key_open:'Open',
+    con_hours:'Ma: 12:00–14:30 &amp; 18:00–22:00<br>Di–Za: 12:00–14:30 &amp; 18:00–22:30<br>Zo: 12:00–14:30 &amp; 18:00–22:00'
+  },
+  en: {
+    nav_about:'About', nav_res:'Reservation', nav_cta:'Order now',
+    hero_open:'Open today', con_key_open:'Hours',
+    con_hours:'Mon: 12:00–14:30 &amp; 18:00–22:00<br>Tue–Sat: 12:00–14:30 &amp; 18:00–22:30<br>Sun: 12:00–14:30 &amp; 18:00–22:00'
+  }
+};
+let qvLang = localStorage.getItem('qv-lang') || 'nl';
+function qvSetLang(l) {
+  qvLang = l;
+  const d = QVLANG[l];
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    if (d[el.dataset.lang] !== undefined) el.innerHTML = d[el.dataset.lang];
+  });
+  document.querySelectorAll('#langToggle .lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  document.documentElement.lang = l;
+  localStorage.setItem('qv-lang', l);
+}
+document.getElementById('langToggle').addEventListener('click', e => {
+  const b = e.target.closest('.lang-btn');
+  if (b) qvSetLang(b.dataset.lang);
+});
+qvSetLang(qvLang);
 </script>
 </body>
 </html>
